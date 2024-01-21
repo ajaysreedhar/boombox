@@ -17,6 +17,12 @@
 
 namespace bmx {
 
+/**
+ * @brief Defines a throwable error for the engine module.
+ *
+ * All sub-modules in the engine module must throw an
+ * instance of this class if an exception occurs.
+ */
 class UIError: public std::runtime_error  {
 
 private:
