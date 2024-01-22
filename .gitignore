@@ -2,6 +2,10 @@
 .vscode
 .idea
 
+# Build and output directories
+dist
+release
+
 # CMake intermediates
 build/
 CMakeLists.txt.user
