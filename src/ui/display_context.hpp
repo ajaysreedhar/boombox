@@ -18,16 +18,34 @@ namespace bmx {
 /**
  * @brief Defines an event polled from the display context.
  */
-struct display_event {
+struct ui_event {
     int kind = 404;
 
     enum EventKind: int {
         UNKNOWN = 404,
         PROCESS_QUIT = 500,
-        WINDOW_CLOSE
+        WINDOW_CLOSE,
+        KEY_PRESS_Q
     };
 };
 
-}
+class DisplayContext {
+
+private: /* ===-=== Private Members ===-=== */
+    static bool s_isInitialised;
+
+public:
+    typedef struct ui_event UIEvent;
+
+    static void initialise();
+
+    static void shutdown();
+
+    static bool isInitialised();
+
+    static DisplayContext::UIEvent pollEvent();
+};
+
+} // namespace bmx
 
 #endif // BMX_UI_DISPLAY_CONTEXT_H
