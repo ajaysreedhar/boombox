@@ -3,11 +3,11 @@
 .idea
 
 # Build and output directories
+build
 dist
 release
 
 # CMake intermediates
-build/
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
