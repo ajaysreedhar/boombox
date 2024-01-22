@@ -1,5 +1,5 @@
 /**
- * display-context.hpp - Global display context.
+ * display_context.hpp - Global display context.
  * ------------------------------------------------------------------------
  *
  * Copyright (c) 2024-present Ajay Sreedhar
@@ -12,6 +12,9 @@
 
 #ifndef BMX_UI_DISPLAY_CONTEXT_H
 #define BMX_UI_DISPLAY_CONTEXT_H
+
+#include <vector>
+#include "renderer.hpp"
 
 namespace bmx {
 
@@ -34,6 +37,8 @@ class DisplayContext {
 private: /* ===-=== Private Members ===-=== */
     static bool s_isInitialised;
 
+    static std::vector<bmx::Renderer*> s_renderers;
+
 public:
     typedef struct ui_event UIEvent;
 
@@ -42,6 +47,8 @@ public:
     static void shutdown();
 
     static bool isInitialised();
+
+    static Renderer* createRenderer();
 
     static DisplayContext::UIEvent pollEvent();
 };
