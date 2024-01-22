@@ -10,8 +10,8 @@
  * ========================================================================
  */
 #include <SDL2/SDL.h>
+#include "platform/logger.hpp"
 #include "assert.hpp"
-#include "logger.hpp"
 #include "display_context.hpp"
 
 #if defined(DINO_MODE_DEBUG) && DINO_MODE_DEBUG == 1

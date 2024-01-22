@@ -17,7 +17,7 @@
 #include "except.hpp"
 
 #define BMX_ASSERT_SDL_HANDLE(handle, code) \
-if (handle == nullptr) {                    \  
+if (handle == nullptr) {                    \
     const char* message = SDL_GetError();   \
     throw bmx::UIError(message, code);      \
 }
