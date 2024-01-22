@@ -15,6 +15,7 @@
 
 #include <string>
 #include <SDL2/SDL.h>
+#include "sprite_material.hpp"
 
 namespace bmx {
 
@@ -24,12 +25,19 @@ private: /* ===-=== Private Members ===-=== */
     int m_width;
     int m_height;
 
-    SDL_Window* m_window = nullptr;
+    SDL_Window*     m_window = nullptr;
+    SDL_Renderer*   m_renderer = nullptr;
 
 public:
-    Renderer(const std::string& title, int width, int height);
+    Renderer(const std::string&, int, int);
 
     ~Renderer();
+
+    bmx::SpriteMaterial* loadSprite(const std::string&);
+
+    void draw(bmx::SpriteMaterial*);
+
+    void commit();
 };
 
 } // namespcae bmx
