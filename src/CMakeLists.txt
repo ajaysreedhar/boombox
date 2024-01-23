@@ -1,4 +1,8 @@
+find_package(PkgConfig REQUIRED)
 find_package(SDL2 REQUIRED)
+
+pkg_check_modules(PIPEWIRE REQUIRED libpipewire-0.3)
+pkg_check_modules(LIBSPA REQUIRED libspa-0.2)
 
 set(BASEPATH "${CMAKE_SOURCE_DIR}/src")
 
@@ -10,6 +14,12 @@ add_definitions(-DBMX_MODE_DEBUG=1)
 add_library(x-platform SHARED
     platform/logger.cpp         platform/logger.hpp
     platform/filesystem.cpp     platform/filesystem.hpp)
+
+add_library(x-input SHARED
+    input/except.cpp            input/except.hpp
+    input/pipewire_client.cpp   input/pipewire_client.hpp)
+target_link_libraries(x-input PUBLIC "${PIPEWIRE_LIBRARIES}" "${LIBSPA_LIBRARIES}" x-platform)
+target_include_directories(x-input PUBLIC "${PIPEWIRE_INCLUDE_DIRS}" "${LIBSPA_INCLUDE_DIRS}" "${CMAKE_CURRENT_SOURCE_DIR}")
 
 add_library(x-display SHARED
     ui/except.cpp           ui/except.hpp

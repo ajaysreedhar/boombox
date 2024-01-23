@@ -48,6 +48,32 @@ int main(int argc, char** argv) {
                 is_running = false;
                 break;
 
+            case bmx::DisplayContext::UIEvent::KEY_PRESS_S:
+                lt_woofer->setScissor(270, 0);
+                rt_woofer->setScissor(270, 0);
+                
+                main_renderer->clear();
+
+                main_renderer->draw(window_bg);
+
+                main_renderer->draw(lt_woofer);
+                main_renderer->draw(rt_woofer);
+                main_renderer->commit();
+                break;
+
+            case bmx::DisplayContext::UIEvent::KEY_PRESS_W:
+                lt_woofer->setScissor(0, 0);
+                rt_woofer->setScissor(0, 0);
+
+                main_renderer->clear();
+
+                main_renderer->draw(window_bg);
+                
+                main_renderer->draw(lt_woofer);
+                main_renderer->draw(rt_woofer);
+                main_renderer->commit();
+                break;
+
             default:
                 break;
         }
