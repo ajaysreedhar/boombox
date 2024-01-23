@@ -38,10 +38,20 @@ bmx::SpriteMaterial* bmx::Renderer::loadSprite(const std::string& image_file) {
 }
 
 void bmx::Renderer::draw(bmx::SpriteMaterial* material) {
-    const SDL_Rect* srcrect = material->getProperties();
+    const SDL_Rect* srcrect = material->getScissor();
     const SDL_Rect* dstrect = material->getAttachment();
 
     SDL_RenderCopy(m_renderer, material->getTexture(), srcrect, dstrect);
+}
+
+void bmx::Renderer::clear() {
+    SDL_SetRenderDrawColor(m_renderer, 0x5E, 0x82, 0xAC, 0xff);
+    int result = SDL_RenderClear(m_renderer);
+    BMX_ASSERT_SDL_RESULT(result)
+}
+
+void bmx::Renderer::begin() {
+    this->clear();
 }
 
 void bmx::Renderer::commit() {

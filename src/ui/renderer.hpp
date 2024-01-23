@@ -37,6 +37,10 @@ public:
 
     void draw(bmx::SpriteMaterial*);
 
+    void clear();
+
+    void begin();
+
     void commit();
 };
 
