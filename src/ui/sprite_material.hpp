@@ -18,6 +18,9 @@
 
 namespace bmx {
 
+/**
+ * @brief Wraps a SDL texture for rendering on to the screen.
+ */
 class SpriteMaterial {
 
 private: /* ===-=== Private members ===-=== */
@@ -52,7 +55,7 @@ public: /* ===-=== Public members ===-=== */
 
     [[nodiscard]] SDL_Texture* getTexture() const;
 
-    [[nodiscard]] const SDL_Rect* getProperties() const;
+    [[nodiscard]] const SDL_Rect* getScissor() const;
 
     [[nodiscard]] const SDL_Rect* getAttachment() const;
 

@@ -100,7 +100,7 @@ SDL_Texture* bmx::SpriteMaterial::getTexture() const {
     return m_texture;
 }
 
-const SDL_Rect* bmx::SpriteMaterial::getProperties() const {
+const SDL_Rect* bmx::SpriteMaterial::getScissor() const {
     return &m_scissor;
 }
 
