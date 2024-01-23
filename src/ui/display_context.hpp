@@ -28,7 +28,9 @@ struct ui_event {
         UNKNOWN = 404,
         PROCESS_QUIT = 500,
         WINDOW_CLOSE,
-        KEY_PRESS_Q
+        KEY_PRESS_Q,
+        KEY_PRESS_S,
+        KEY_PRESS_W
     };
 };
 

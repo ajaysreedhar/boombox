@@ -81,6 +81,14 @@ bmx::DisplayContext::UIEvent bmx::DisplayContext::pollEvent() {
                 bmx_event.kind = bmx::DisplayContext::UIEvent::KEY_PRESS_Q;
                 break;
 
+            case SDL_SCANCODE_W:
+                bmx_event.kind = bmx::DisplayContext::UIEvent::KEY_PRESS_W;
+                break;
+
+            case SDL_SCANCODE_S:
+                bmx_event.kind = bmx::DisplayContext::UIEvent::KEY_PRESS_S;
+                break;
+
             default:
                 break;;
         }
