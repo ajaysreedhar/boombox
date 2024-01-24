@@ -9,3 +9,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 project(boombox)
 
 add_subdirectory(src)
+add_subdirectory(test)
