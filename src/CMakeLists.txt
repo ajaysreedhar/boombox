@@ -31,5 +31,5 @@ target_link_libraries(x-display PUBLIC -lSDL2 -lSDL2_image x-platform)
 target_include_directories(x-display PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
 add_executable(boombox main.cpp)
-target_link_libraries(boombox PRIVATE x-platform x-display)
+target_link_libraries(boombox PRIVATE x-platform x-input x-display)
 target_include_directories(boombox PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
