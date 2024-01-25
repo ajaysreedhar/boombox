@@ -1,6 +1,8 @@
 #include <cstdlib>
+#include <thread>
 #include "platform/logger.hpp"
 #include "platform/filesystem.hpp"
+#include "input/pipewire_client.hpp"
 #include "ui/except.hpp"
 #include "ui/sprite_material.hpp"
 #include "ui/renderer.hpp"
@@ -9,10 +11,15 @@
 int main(int argc, char** argv) {
     bool is_running = true;
 
+    std::thread::id main_thread_id = std::this_thread::get_id();
+    bmx::Logger::debug("Main thread ", main_thread_id);
+
     bmx::DisplayContext::initialise();
+    bmx::PipewireClient::initialise(argc, argv);
     bmx::Logger::info("Welcome to Boombox!");
 
     bmx::Renderer* main_renderer = nullptr;
+    auto audio_client = bmx::PipewireClient::factory();
 
     try {
         main_renderer = bmx::DisplayContext::createRenderer();
@@ -38,6 +45,9 @@ int main(int argc, char** argv) {
 
     main_renderer->commit();
 
+    auto audio_thread = new std::thread(&bmx::PipewireClient::capture, audio_client);
+    audio_thread->detach();
+
     while (is_running) {
         bmx::DisplayContext::UIEvent ui_event = bmx::DisplayContext::pollEvent();
 
@@ -59,6 +69,7 @@ int main(int argc, char** argv) {
                 main_renderer->draw(lt_woofer);
                 main_renderer->draw(rt_woofer);
                 main_renderer->commit();
+                audio_client->halt();
                 break;
 
             case bmx::DisplayContext::UIEvent::KEY_PRESS_W:
@@ -79,11 +90,18 @@ int main(int argc, char** argv) {
         }
     }
 
+    audio_client->halt();
+
     delete (rt_woofer);
     delete (lt_woofer);
     delete (window_bg);
+    delete (audio_client);
 
     bmx::DisplayContext::shutdown();
+    bmx::PipewireClient::shutdown();
+
+    delete audio_thread;
+
     bmx::Logger::info("Bye!");
 
     return EXIT_SUCCESS;
