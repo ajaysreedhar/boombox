@@ -12,22 +12,18 @@ int main (int argc, char** argv) {
     bmx::Logger::info("Welcome to Pipewire Client Test!");
 
     auto audio_client = bmx::PipewireClient::factory();
-    //audio_client->capture();
     
     auto audio_thread = new std::thread(&bmx::PipewireClient::capture, audio_client);
     audio_thread->detach();
 
-    bmx::Logger::info("S1 Joinable", audio_thread->joinable() ? "Yes" : "No");
-
+    bmx::Logger::info("Press Enter to exit...");
     std::cin.get();
 
     audio_client->halt();
-    bmx::Logger::info("S2 Joinable", audio_thread->joinable() ? "Yes" : "No");
 
-    bmx::Logger::info("Sleep...");
-    sleep(5);
-    bmx::Logger::info("Done!");
-    bmx::Logger::info("S3 Joinable", audio_thread->joinable() ? "Yes" : "No");
+    while (audio_client->isRunning()) {
+        sleep(1);
+    }
 
     delete (audio_thread);
     delete (audio_client);
