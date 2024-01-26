@@ -52,6 +52,7 @@ public: /* ===-=== Public members ===-=== */
     void capture();
     void halt();
     void attachListener(void (*)(void *));
+    bool isRunning();
 
     ~PipewireClient();
 };

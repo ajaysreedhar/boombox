@@ -25,23 +25,13 @@ void bmx::PipewireClient::onStreamChangedCb(void* bundle, uint32_t id, const str
 
     spa_format_audio_raw_parse(pod_param, &payload->format.info.raw);
 
-    bmx::Logger::info("Capturing rate", payload->format.info.raw.rate, "channels", payload->format.info.raw.channels);
+#if defined(BMX_MODE_DEBUG) && BMX_MODE_DEBUG == 1
+    bmx::Logger::info("Capturing rate:", payload->format.info.raw.rate, ", Channels:", payload->format.info.raw.channels);
+#endif // BMX_MODE_DEBUG
 }
 
 void bmx::PipewireClient::onProcessHolderCb(void* bundle) {
     auto payload = reinterpret_cast<bmx::InputBundle*>(bundle);
-
-    /*
-    if (*payload->running == false) {
-        std::thread::id thread_id = std::this_thread::get_id();
-        bmx::Logger::debug("Callback thread ", thread_id);
-    
-        int result = pw_main_loop_quit(payload->loop);
-        bmx::Logger::debug("PipewireClient: Halt signal recieved.", result);
-        
-        return void();
-    }
-    */
 
     struct pw_buffer *b;
     struct spa_buffer *buf;
@@ -138,25 +128,26 @@ bmx::PipewireClient::~PipewireClient() {
 void bmx::PipewireClient::capture() {
     m_isRunning = true;
 
-    std::thread::id thread_id = std::this_thread::get_id();
-    bmx::Logger::debug("Capture thread ", thread_id);
-
     pw_main_loop_run(m_pwLoop);
     pw_stream_destroy(m_pwStream);
+
+    m_isRunning = false;
 
 #if defined(BMX_MODE_DEBUG) && BMX_MODE_DEBUG == 1
     bmx::Logger::debug("Pipewire capture aborted.");
 #endif // BMX_MODE_DEBUG
 
-    m_isRunning = false;
     return void();
 }
 
 void bmx::PipewireClient::halt() {
-    m_isRunning = false;
     pw_main_loop_quit(m_pwLoop);
 }
 
 void bmx::PipewireClient::attachListener(void (*listener)(void *)) {
     m_pwEvents.process = listener;
+}
+
+bool bmx::PipewireClient::isRunning() {
+    return m_isRunning;
 }
