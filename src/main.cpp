@@ -65,11 +65,9 @@ int main(int argc, char** argv) {
                 main_renderer->clear();
 
                 main_renderer->draw(window_bg);
-
                 main_renderer->draw(lt_woofer);
                 main_renderer->draw(rt_woofer);
                 main_renderer->commit();
-                audio_client->halt();
                 break;
 
             case bmx::DisplayContext::UIEvent::KEY_PRESS_W:
@@ -79,7 +77,6 @@ int main(int argc, char** argv) {
                 main_renderer->clear();
 
                 main_renderer->draw(window_bg);
-                
                 main_renderer->draw(lt_woofer);
                 main_renderer->draw(rt_woofer);
                 main_renderer->commit();
@@ -91,6 +88,11 @@ int main(int argc, char** argv) {
     }
 
     audio_client->halt();
+
+    /* Wait for the pipewire main loop to quit. */
+    while (audio_client->isRunning()) {
+        sleep(1);
+    }
 
     delete (rt_woofer);
     delete (lt_woofer);
