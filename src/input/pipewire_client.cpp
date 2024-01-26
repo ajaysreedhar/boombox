@@ -103,7 +103,6 @@ bmx::PipewireClient::PipewireClient() {
     m_pwEvents.process = onProcessHolderCb;
 
     m_payload.running = &m_isRunning;
-    printf("\n isRunning %u = %u v:%d\n", &m_isRunning, m_payload.running, *m_payload.running);
     m_pwStream = m_payload.stream = pw_stream_new_simple(pw_main_loop_get_loop(m_pwLoop), "boombox", m_pwProps, &m_pwEvents, &m_payload);
 
     pod_params[0] = spa_format_audio_raw_build(&m_podBuilder, SPA_PARAM_EnumFormat, &audio_info);
