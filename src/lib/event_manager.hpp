@@ -25,7 +25,7 @@ class EventObserver {
 class EventManager {
 
 private:
-    static std::unordered_map<std::string, bmx::EventObserver>
+    static std::unordered_map<std::string, bmx::EventObserver> s_observers;
 
 };
 
