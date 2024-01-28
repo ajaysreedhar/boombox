@@ -13,10 +13,22 @@
 #ifndef BMX_LIB_EVENT_MANAGER_H
 #define BMX_LIB_EVENT_MANAGER_H
 
+#include <string>
+#include <unordered_map>
+
 namespace bmx {
 
+class EventObserver {
 
-    
+};
+
+class EventManager {
+
+private:
+    static std::unordered_map<std::string, bmx::EventObserver>
+
+};
+
 }
 
 #endif // BMX_LIB_EVENT_MANAGER_H
