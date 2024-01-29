@@ -9,3 +9,11 @@
  *
  * ========================================================================
  */
+
+#include "event_manager.hpp"
+
+template<typename T> bmx::EventPayload<T>::EventPayload(T payload): m_payload{payload} {}
+
+template<typename T> T bmx::EventPayload<T>::getPayload() {
+    return m_payload;
+}
