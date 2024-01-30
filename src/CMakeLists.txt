@@ -11,10 +11,6 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/dist/lib")
 
 add_definitions(-DBMX_MODE_DEBUG=1)
 
-add_library(x-utils SHARED
-    utils/event_manager.cpp     utils/event_manager.hpp)
-target_include_directories(x-utils PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
-
 add_library(x-platform SHARED
     platform/logger.cpp         platform/logger.hpp
     platform/filesystem.cpp     platform/filesystem.hpp)
