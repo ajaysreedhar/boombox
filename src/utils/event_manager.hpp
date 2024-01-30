@@ -33,20 +33,23 @@ template<typename T>
 class EventObserver {
 
 private:
-    bmx::EventPayload<T>*  m_payload;
+    bmx::EventPayload<T>* m_payload;
     void(*)(T) m_callback;
 
 public:
     explicit EventObserver(void(*)(T), bmx::EventPayload<T>);
 };
 
+template <template<auto> typename T>
 class EventManager {
 
 private:
-    static std::unordered_map<std::string, bmx::EventObserver<void*>> s_observers;
+    static std::unordered_map<std::string, bmx::EventObserver<T>> s_observers;
+    static void dispatch(bmx::EventObserver<T>*);
 
 public:
     template<typename T> static void observe(std::string&, EventObserver<T>*);
+    static void notify(std::string&);
 };
 
 }

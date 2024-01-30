@@ -17,3 +17,8 @@ template<typename T> bmx::EventPayload<T>::EventPayload(T payload): m_payload{pa
 template<typename T> T bmx::EventPayload<T>::getPayload() {
     return m_payload;
 }
+
+template <template<auto> typename T> void bmx::EventManager<T>::notify(std::string& event) {
+    auto observer = s_observers.at(event);
+    bmx::EventManager::dispatch(observer);
+}
