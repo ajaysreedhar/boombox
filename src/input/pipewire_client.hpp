@@ -1,27 +1,38 @@
+/**
+ * pipewire_client.hpp - Pipewire client implementation.
+ * ------------------------------------------------------------------------
+ *
+ * Copyright (c) 2024-present Ajay Sreedhar
+ * 
+ * Licensed under the MIT License.
+ * Please see the LICENSE file located in the root directory.
+ *
+ * ========================================================================
+ */
+
 #ifndef BMX_INPUT_PIPEWIRE_CLIENT_H
 #define BMX_INPUT_PIPEWIRE_CLIENT_H
 
 #include <pipewire/pipewire.h>
 #include <spa/param/audio/format-utils.h>
+#include "audio_client.hpp"
 
 namespace bmx {
-
 
 struct input_bundle {
     struct pw_main_loop*    loop;
     struct pw_stream*       stream;
     struct spa_audio_info   format;
     bool*                   running;
+    bmx::AudioEvent*        event;
 };
 
 typedef struct input_bundle InputBundle;
 
-
-
 /**
  * @brief Client capturing audio from Pipewire interface.
  */
-class PipewireClient {
+class PipewireClient: public bmx::AudioClient {
 
 private: /* ===-=== Private members ===-=== */
     static bool s_isInitialised;
@@ -51,7 +62,7 @@ public: /* ===-=== Public members ===-=== */
 
     void capture();
     void halt();
-    void attachListener(void (*)(void *));
+    void onCapture(AudioEvent*);
     bool isRunning();
 
     ~PipewireClient();

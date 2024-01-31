@@ -1,3 +1,15 @@
+/**
+ * pipewire_client.cpp - Pipewire client implementation.
+ * ------------------------------------------------------------------------
+ *
+ * Copyright (c) 2024-present Ajay Sreedhar
+ * 
+ * Licensed under the MIT License.
+ * Please see the LICENSE file located in the root directory.
+ *
+ * ========================================================================
+ */
+
 #include <cmath>
 #include <thread>
 #include <csignal>
@@ -66,6 +78,8 @@ void bmx::PipewireClient::onProcessHolderCb(void* bundle) {
     }
 
     pw_stream_queue_buffer(payload->stream, b);
+
+    (*payload->event->listener)(payload->event->payload);
 }
 
 void bmx::PipewireClient::initialise(int argc, char** argv) {
@@ -143,8 +157,8 @@ void bmx::PipewireClient::halt() {
     pw_main_loop_quit(m_pwLoop);
 }
 
-void bmx::PipewireClient::attachListener(void (*listener)(void *)) {
-    m_pwEvents.process = listener;
+void bmx::PipewireClient::onCapture(AudioEvent* event) {
+    m_payload.event = event;
 }
 
 bool bmx::PipewireClient::isRunning() {
