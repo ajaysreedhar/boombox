@@ -8,6 +8,29 @@
 #include "ui/renderer.hpp"
 #include "ui/display_context.hpp"
 
+struct audio_payload {
+    bmx::SpriteMaterial* lt_woofer;
+    bmx::SpriteMaterial* rt_woofer;
+};
+
+void onAudioInput(int channel, int peak, void* payload) {
+    auto pl = reinterpret_cast<struct audio_payload*>(payload);
+
+    if (channel == 0) {
+        return void();
+    }
+
+    if (peak >= 15) {
+        bmx::Logger::debug(channel, ": ", peak);
+        pl->lt_woofer->setScissor(270, 0);
+        pl->rt_woofer->setScissor(270, 0);
+
+    } else {
+        pl->lt_woofer->setScissor(0, 0);
+        pl->rt_woofer->setScissor(0, 0);
+    }
+}
+
 int main(int argc, char** argv) {
     bool is_running = true;
 
@@ -32,6 +55,18 @@ int main(int argc, char** argv) {
     bmx::SpriteMaterial* window_bg = main_renderer->loadSprite(bmx::Filesystem::resource("skins/default", "background-main.png"));
     bmx::SpriteMaterial* lt_woofer = main_renderer->loadSprite(bmx::Filesystem::resource("skins/default", "sprite-map-main.png"));
     bmx::SpriteMaterial* rt_woofer = lt_woofer->clone();
+
+    struct audio_payload event_payload {
+        .lt_woofer = lt_woofer,
+        .rt_woofer = rt_woofer
+    };
+
+    bmx::AudioEvent audio_event {
+        .listener = onAudioInput,
+        .payload = &event_payload
+    };
+
+    audio_client->onCapture(&audio_event);
 
     lt_woofer->setScissor(0, 0, 270, 270);
     lt_woofer->setAttachment(100, 100, 270, 270);
@@ -61,30 +96,23 @@ int main(int argc, char** argv) {
             case bmx::DisplayContext::UIEvent::KEY_PRESS_S:
                 lt_woofer->setScissor(270, 0);
                 rt_woofer->setScissor(270, 0);
-                
-                main_renderer->clear();
-
-                main_renderer->draw(window_bg);
-                main_renderer->draw(lt_woofer);
-                main_renderer->draw(rt_woofer);
-                main_renderer->commit();
                 break;
 
             case bmx::DisplayContext::UIEvent::KEY_PRESS_W:
                 lt_woofer->setScissor(0, 0);
                 rt_woofer->setScissor(0, 0);
-
-                main_renderer->clear();
-
-                main_renderer->draw(window_bg);
-                main_renderer->draw(lt_woofer);
-                main_renderer->draw(rt_woofer);
-                main_renderer->commit();
                 break;
 
             default:
                 break;
         }
+
+        main_renderer->clear();
+
+        main_renderer->draw(window_bg);
+        main_renderer->draw(lt_woofer);
+        main_renderer->draw(rt_woofer);
+        main_renderer->commit();
     }
 
     audio_client->halt();
