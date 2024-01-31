@@ -68,7 +68,8 @@ bmx::DisplayContext::UIEvent bmx::DisplayContext::pollEvent() {
     SDL_Event sdl_event {};
     bmx::DisplayContext::UIEvent bmx_event {bmx::DisplayContext::UIEvent::UNKNOWN};
 
-    SDL_WaitEvent(&sdl_event);
+    SDL_Delay(100);
+    SDL_PollEvent(&sdl_event);
 
     if (sdl_event.type == SDL_QUIT) {
         bmx_event.kind = bmx::DisplayContext::UIEvent::PROCESS_QUIT;
