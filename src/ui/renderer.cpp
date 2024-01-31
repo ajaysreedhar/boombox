@@ -41,7 +41,8 @@ void bmx::Renderer::draw(bmx::SpriteMaterial* material) {
     const SDL_Rect* srcrect = material->getScissor();
     const SDL_Rect* dstrect = material->getAttachment();
 
-    SDL_RenderCopy(m_renderer, material->getTexture(), srcrect, dstrect);
+    int result = SDL_RenderCopy(m_renderer, material->getTexture(), srcrect, dstrect);
+    BMX_ASSERT_SDL_RESULT(result)
 }
 
 void bmx::Renderer::clear() {
