@@ -17,6 +17,7 @@ add_library(x-platform SHARED
 
 add_library(x-input SHARED
     input/except.cpp            input/except.hpp
+    input/audio_client.hpp
     input/pipewire_client.cpp   input/pipewire_client.hpp)
 target_link_libraries(x-input PUBLIC "${PIPEWIRE_LIBRARIES}" "${LIBSPA_LIBRARIES}" x-platform)
 target_include_directories(x-input PUBLIC "${PIPEWIRE_INCLUDE_DIRS}" "${LIBSPA_INCLUDE_DIRS}" "${CMAKE_CURRENT_SOURCE_DIR}")
