@@ -75,11 +75,10 @@ void bmx::PipewireClient::onProcessHolderCb(void* bundle) {
         }
 
         peak = SPA_CLAMP(max * 30, 0, 40);
+        (*payload->event->listener)(c, peak, payload->event->payload);
     }
 
     pw_stream_queue_buffer(payload->stream, b);
-
-    (*payload->event->listener)(payload->event->payload);
 }
 
 void bmx::PipewireClient::initialise(int argc, char** argv) {

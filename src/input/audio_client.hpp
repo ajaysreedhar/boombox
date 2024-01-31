@@ -16,7 +16,7 @@
 namespace bmx {
 
 struct audio_event {
-    void (*listener)(void *);
+    void (*listener)(int, int, void *);
     void* payload;
 };
 
