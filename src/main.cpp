@@ -9,6 +9,7 @@
 #include "ui/display_context.hpp"
 
 struct audio_payload {
+    bool chFlag[2];
     bmx::SpriteMaterial* lt_woofer;
     bmx::SpriteMaterial* rt_woofer;
 };
@@ -16,26 +17,19 @@ struct audio_payload {
 void onAudioInput(int channel, int peak, void* payload) {
     auto pl = reinterpret_cast<struct audio_payload*>(payload);
 
-    if (channel == 0) {
-        return void();
-    }
+    bmx::SpriteMaterial* target_sprite = channel == 0 ? pl->lt_woofer : pl->rt_woofer;
 
-    if (peak >= 15) {
-        bmx::Logger::debug(channel, ": ", peak);
-        pl->lt_woofer->setScissor(270, 0);
-        pl->rt_woofer->setScissor(270, 0);
-
-    } else {
-        pl->lt_woofer->setScissor(0, 0);
-        pl->rt_woofer->setScissor(0, 0);
+    if (peak >= 25) {
+        target_sprite->setScissor(270, 0);
+        pl->chFlag[channel] = true;
     }
 }
 
 int main(int argc, char** argv) {
     bool is_running = true;
+    bool should_draw = true;
 
     std::thread::id main_thread_id = std::this_thread::get_id();
-    bmx::Logger::debug("Main thread ", main_thread_id);
 
     bmx::DisplayContext::initialise();
     bmx::PipewireClient::initialise(argc, argv);
@@ -57,6 +51,7 @@ int main(int argc, char** argv) {
     bmx::SpriteMaterial* rt_woofer = lt_woofer->clone();
 
     struct audio_payload event_payload {
+        .chFlag = {false, false},
         .lt_woofer = lt_woofer,
         .rt_woofer = rt_woofer
     };
@@ -107,12 +102,36 @@ int main(int argc, char** argv) {
                 break;
         }
 
-        main_renderer->clear();
+        if (should_draw) {
+            lt_woofer->setScissor(0, 0);
+            rt_woofer->setScissor(0, 0);
 
-        main_renderer->draw(window_bg);
-        main_renderer->draw(lt_woofer);
-        main_renderer->draw(rt_woofer);
-        main_renderer->commit();
+            main_renderer->clear();
+
+            main_renderer->draw(window_bg);
+            main_renderer->draw(lt_woofer);
+            main_renderer->draw(rt_woofer);
+            main_renderer->commit();
+
+            should_draw = false;
+            continue;
+        }
+
+        should_draw = true;
+
+        for (int i = 0; i < 2; i++) {
+            should_draw = should_draw && event_payload.chFlag[i];
+            event_payload.chFlag[i] = false;
+        }
+
+        if (should_draw) {
+            main_renderer->clear();
+
+            main_renderer->draw(window_bg);
+            main_renderer->draw(lt_woofer);
+            main_renderer->draw(rt_woofer);
+            main_renderer->commit();
+        }
     }
 
     audio_client->halt();
